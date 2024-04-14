@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compound Ingredient Calculator</title>
+    <style>
+        #calculator {
+            margin: 0 auto;
+            width: 50%;
+            text-align: center;
+        }
+        h2 {
+            font-size: 36px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 24px;
+            margin: 8px 4px;
+            cursor: pointer;
+            border-radius: 10px;
+        }
+        #result {
+            font-size: 20px;
+        }
+        .equation {
+            font-size: 28px;
+            margin-top: 10px;
+        }
+        label, input, select {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="calculator">
+        <h2>Compound Ingredient Calculator</h2>
+        <p>Enter the details below to calculate the amount of compound needed to achieve a desired concentration:</p>
+
+        <label for="finalVolume">Final Volume:</label>
+        <input type="number" id="finalVolume" step="0.01">
+        <select id="volumeUnit" style="font-size: 20px;">
+            <option value="ml">ml</option>
+            <option value="g">g</option>
+        </select><br><br>
+        
+        <label for="desiredConcentration">Desired Concentration:</label>
+        <input type="number" id="desiredConcentration" step="0.01" placeholder="Percentage (e.g., 20)"><br>
+        <span style="font-size: 18px;">Enter as a percentage (e.g., 20 for 20%)</span><br><br>
+        
+        <label for="concentrationUnit">Concentration Unit:</label>
+        <select id="concentrationUnit" style="font-size: 20px;">
+            <option value="ml/100ml">ml/100ml</option>
+            <option value="g/100ml">g/100ml</option>
+            <option value="g/g">g/g</option>
+        </select><br><br>
+
+        <button onclick="calculate()">Calculate</button>
+        <button onclick="reset()" style="background-color: #f44336;">Reset</button><br><br>
+
+        <p id="result"></p>
+        <p class="equation" id="equation"></p>
+    </div>
+
+    <script>
+        function calculate() {
+            var resultElement = document.getElementById("result");
+            var equationElement = document.getElementById("equation");
+
+            var finalVolume = parseFloat(document.getElementById("finalVolume").value);
+            var volumeUnit = document.getElementById("volumeUnit").value;
+            var desiredConcentration = parseFloat(document.getElementById("desiredConcentration").value);
+            var concentrationUnit = document.getElementById("concentrationUnit").value;
+
+            if (isNaN(finalVolume) || isNaN(desiredConcentration)) {
+                resultElement.textContent = "Please enter valid values for final volume and desired concentration.";
+                equationElement.textContent = "";
+                return;
+            }
+
+            if (volumeUnit === "g") {
+                // Convert grams to milliliters
+                finalVolume /= 1; // Add conversion factor if needed
+            }
+
+            var compoundAmount;
+            switch (concentrationUnit) {
+                case "ml/100ml":
+                    compoundAmount = (finalVolume * desiredConcentration / 100).toFixed(2);
+                    resultElement.textContent = "Amount of compound needed: " + compoundAmount + " ml";
+                    break;
+                case "g/100ml":
+                case "g/g":
+                    compoundAmount = (finalVolume * desiredConcentration / 100).toFixed(2);
+                    resultElement.textContent = "Amount of compound needed: " + compoundAmount + " grams";
+                    break;
+                default:
+                    resultElement.textContent = "Invalid concentration unit";
+                    break;
+            }
+
+            equationElement.textContent = "Equation: Amount of compound = (Final Volume × Desired Concentration) ÷ 100";
+        }
+
+        function reset() {
+            document.getElementById("finalVolume").value = "";
+            document.getElementById("desiredConcentration").value = "";
+            document.getElementById("result").textContent = "";
+            document.getElementById("equation").textContent = "";
+        }
+    </script>
+</body>
+</html>
